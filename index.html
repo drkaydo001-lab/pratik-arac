@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ücretsiz ve pratik çevrim içi hesaplama araçları.">
+  <title>PratikAraç - Ücretsiz Hesaplama Araçları</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #202938;
+    }
+
+    header {
+      background: #172554;
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+    }
+
+    header p {
+      margin: 0;
+      color: #dbeafe;
+    }
+
+    nav {
+      background: #1e3a8a;
+      padding: 12px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 12px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 16px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px #0000000d;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #1d4ed8;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .result {
+      margin-top: 14px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+      color: #166534;
+    }
+
+    .about {
+      margin-top: 26px;
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #64748b;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>PratikAraç</h1>
+    <p>Günlük hayatını kolaylaştıran ücretsiz araçlar!</p>
+  </header>
+
+  <nav>
+    <a href="#araclar">Araçlar</a>
+    <a href="#hakkinda">Hakkımızda</a>
+  </nav>
+
+  <main class="container">
+    <section class="intro">
+      <h2>İhtiyacın olan hesaplama burada</h2>
+      <p>Ücretsiz hesapla, zaman kazan!</p>
+    </section>
+
+    <section class="tools" id="araclar">
+      <div class="card">
+        <h3>Yüzde Hesaplama</h3>
+        <p>Bir sayının belirli bir yüzdesini hesapla.</p>
+
+        <input type="number" id="sayi" placeholder="Sayı">
+        <input type="number" id="yuzde" placeholder="Yüzde (%)">
+
+        <button onclick="yuzdeHesapla()">Hesapla</button>
+        <div class="result" id="yuzdeSonuc" aria-live="polite"></div>
+      </div>
+
+      <div class="card">
+        <h3>İndirim Hesaplama</h3>
+        <p>İndirimli ürünün fiyatını öğren.</p>
+
+        <input type="number" id="fiyat" placeholder="Ürün fiyatı (TL)">
+        <input type="number" id="indirim" placeholder="İndirim (%)">
+
+        <button onclick="indirimHesapla()">Hesapla</button>
+        <div class="result" id="indirimSonuc" aria-live="polite"></div>
+      </div>
+
+      <div class="card">
+        <h3>Ortalama Hesaplama</h3>
+        <p>Notlarının ortalamasını bul.</p>
+
+        <input type="number" id="not1" placeholder="1. not">
+        <input type="number" id="not2" placeholder="2. not">
+        <input type="number" id="not3" placeholder="3. not">
+
+        <button onclick="ortalamaHesapla()">Hesapla</button>
+        <div class="result" id="ortalamaSonuc" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="about" id="hakkinda">
+      <h2>PratikAraç hakkında</h2>
+      <p>
+        PratikAraç, günlük hesaplamaları kolaylaştırmak amacıyla
+        hazırlanmış ücretsiz bir araç sitesidir.
+      </p>
+      <p>Önerilerin varsa site sahibine iletebilirsin.</p>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 PratikAraç · Ücretsiz hesaplama araçları
+  </footer>
+
+  <script>
+    function sayiOku(id) {
+      const alan = document.getElementById(id);
+      if (alan.value.trim() === "") return null;
+
+      const deger = Number(alan.value);
+      return Number.isFinite(deger) ? deger : null;
+    }
+
+    function bicimlendir(sayi) {
+      return sayi.toLocaleString("tr-TR", {
+        maximumFractionDigits: 2
+      });
+    }
+
+    function yuzdeHesapla() {
+      const sayi = sayiOku("sayi");
+      const yuzde = sayiOku("yuzde");
+      const sonuc = document.getElementById("yuzdeSonuc");
+
+      if (sayi === null || yuzde === null || yuzde < 0) {
+        sonuc.textContent = "Lütfen geçerli sayılar gir.";
+        return;
+      }
+
+      sonuc.textContent = "Sonuç: " +
+        bicimlendir(sayi * yuzde / 100);
+    }
+
+    function indirimHesapla() {
+      const fiyat = sayiOku("fiyat");
+      const indirim = sayiOku("indirim");
+      const sonuc = document.getElementById("indirimSonuc");
+
+      if (fiyat === null || indirim === null ||
+          fiyat < 0 || indirim < 0 || indirim > 100) {
+        sonuc.textContent = "Fiyatı ve %0–100 arası indirimi gir.";
+        return;
+      }
+
+      const yeniFiyat = fiyat * (1 - indirim / 100);
+
+      sonuc.textContent = "İndirimli fiyat: " +
+        bicimlendir(yeniFiyat) + " TL";
+    }
+
+    function ortalamaHesapla() {
+      const notlar = [
+        sayiOku("not1"),
+        sayiOku("not2"),
+        sayiOku("not3")
+      ];
+
+      const sonuc = document.getElementById("ortalamaSonuc");
+
+      if (notlar.some(n => n === null || n < 0 || n > 100)) {
+        sonuc.textContent = "0–100 arasında üç geçerli not gir.";
+        return;
+      }
+
+      const ortalama = notlar.reduce((toplam, n) => toplam + n, 0) / 3;
+
+      sonuc.textContent = "Not ortalaman: " + bicimlendir(ortalama);
+    }
+  </script>
+</body>
+</html>
